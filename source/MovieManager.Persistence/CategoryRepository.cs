@@ -1,4 +1,6 @@
 ﻿using MovieManager.Core.Contracts;
+using MovieManager.Core.Entities;
+using System.Linq;
 
 namespace MovieManager.Persistence
 {
@@ -9,6 +11,31 @@ namespace MovieManager.Persistence
         public CategoryRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public void AddRange(Category[] categories)
+        {
+            _dbContext.Categories.AddRange(categories);
+        }
+
+        public Category GetYearWithMostActionMovies(string categoryName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        (string Category, int Amount) ICategoryRepository.GetCategoryWithTheMostMovies()
+        {
+            return _dbContext
+                .Categories
+                .Select(c => new
+                {
+                    Category = c.CategoryName,
+                    Amount = c.Movies.Count()
+                })
+                .OrderByDescending(c => c.Amount)
+                .AsEnumerable()
+                .Select(c => (c.Category, c.Amount))
+                .First();
         }
 
     }

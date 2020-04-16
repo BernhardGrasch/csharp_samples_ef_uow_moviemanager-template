@@ -28,10 +28,10 @@ namespace MovieManager.ImportConsole
             using (UnitOfWork unitOfWork = new UnitOfWork())
             {
                 Console.WriteLine("Datenbank löschen");
-                //TODO: Datenbank löschen
+                unitOfWork.DeleteDatabase();
 
                 Console.WriteLine("Datenbank migrieren");
-                //TODO: Migrationen anstoßen
+                unitOfWork.MigrateDatabase();
 
                 Console.WriteLine("Movies/Categories werden eingelesen");
 
@@ -42,13 +42,14 @@ namespace MovieManager.ImportConsole
                     return;
                 }
 
-                var categories = Enumerable.Empty<Movie>();
-                //TODO: Kategorien ermitteln
+                var categories = movies
+                                .Select(m => m.Category)
+                                .Distinct()
+                                .ToArray();
 
                 Console.WriteLine($"  Es wurden {movies.Count()} Movies in {categories.Count()} Kategorien eingelesen!");
 
-                //TODO: Movies und Kategorien in die Datenbank schreiben
-
+                unitOfWork.Save();
                 Console.WriteLine();
             }
         }
@@ -59,20 +60,33 @@ namespace MovieManager.ImportConsole
             Console.WriteLine("        Statistik");
             Console.WriteLine("***************************");
 
-
-            // Längster Film: Bei mehreren gleichlangen Filmen, soll jener angezeigt werden, dessen Titel im Alphabet am weitesten vorne steht.
-            // Die Dauer des längsten Films soll in Stunden und Minuten angezeigt werden!
-            //TODO
-
-
-            // Top Kategorie:
-            //   - Jene Kategorie mit den meisten Filmen.
-            //TODO
+            using (UnitOfWork unitOfWork = new UnitOfWork())
+            {
+                // Längster Film: Bei mehreren gleichlangen Filmen, soll jener angezeigt werden, dessen Titel im Alphabet am weitesten vorne steht.
+                // Die Dauer des längsten Films soll in Stunden und Minuten angezeigt werden!
+                //TODO
+                var longestMovie = unitOfWork.MovieRepository.GetLongestFilm();
+                Console.WriteLine($"Längster Film: {longestMovie.Title}; Länge: {longestMovie.Duration}");
 
 
-            // Jahr der Kategorie "Action":
-            //  - In welchem Jahr wurden die meisten Action-Filme veröffentlicht?
-            //TODO
+                // Top Kategorie:
+                //   - Jene Kategorie mit den meisten Filmen.
+                //TODO
+                var categoryWithTheMostMovies = unitOfWork.CategoryRepository.GetCategoryWithTheMostMovies();
+                Console.WriteLine($"Kategorie mit den meisten Filmen: '{categoryWithTheMostMovies.Category}'; Filme: {categoryWithTheMostMovies.Amount} ");
+
+                // Jahr der Kategorie "Action":
+                //  - In welchem Jahr wurden die meisten Action-Filme veröffentlicht?
+                //TODO
+
+            }
+
+
+
+
+
+
+
 
 
             // Kategorie Auswertung (Teil 1):
