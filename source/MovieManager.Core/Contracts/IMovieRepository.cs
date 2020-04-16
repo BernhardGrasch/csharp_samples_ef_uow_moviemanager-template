@@ -6,5 +6,6 @@ namespace MovieManager.Core.Contracts
     {
         Movie GetLongestFilm();
 
+        int GetYearOfMostActionMovies();
     }
 }

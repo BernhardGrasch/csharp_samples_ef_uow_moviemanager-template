@@ -18,11 +18,6 @@ namespace MovieManager.Persistence
             _dbContext.Categories.AddRange(categories);
         }
 
-        public Category GetYearWithMostActionMovies(string categoryName)
-        {
-            throw new System.NotImplementedException();
-        }
-
         (string Category, int Amount) ICategoryRepository.GetCategoryWithTheMostMovies()
         {
             return _dbContext

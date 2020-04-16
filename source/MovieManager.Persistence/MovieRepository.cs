@@ -26,5 +26,21 @@ namespace MovieManager.Persistence
                 .ThenByDescending(m => m.Title)
                 .First();
         }
+
+        public int GetYearOfMostActionMovies()
+        {
+            return _dbContext
+                 .Movies
+                 .Where(m => m.Category.CategoryName == "Action")
+                 .GroupBy(m => m.Year)
+                 .Select(m => new
+                 {
+                     Year = m.Key,
+                     Count = m.Count()
+                 })
+                 .OrderByDescending(m => m.Count)
+                 .Select(m => m.Year)
+                 .First();
+        }
     }
 }

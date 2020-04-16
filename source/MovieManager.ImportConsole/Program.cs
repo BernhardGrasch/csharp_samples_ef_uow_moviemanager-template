@@ -78,6 +78,8 @@ namespace MovieManager.ImportConsole
                 // Jahr der Kategorie "Action":
                 //  - In welchem Jahr wurden die meisten Action-Filme veröffentlicht?
                 //TODO
+                var yearWithMostActionMovies = unitOfWork.MovieRepository.GetYearOfMostActionMovies();
+                Console.WriteLine($"Jahr der Action Filme: {yearWithMostActionMovies}");
 
             }
 
